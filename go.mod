@@ -1,4 +1,4 @@
-module my-go-app
+module my-golang-k8s-test
 
 go 1.19
 

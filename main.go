@@ -13,11 +13,9 @@ import (
 
 func main() {
 	var kubeconfig *string
-	if home := homedir.HomeDir(); home != "" {
-		kubeconfig = flag.String("kubeconfig", filepath.Join(home, ".kube", "config"), "(optional) absolute path to the kubeconfig file")
-	} else {
-		kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
-	}
+	var namespace *string
+	kubeconfig = flag.String("kubeconfig", filepath.Join(homedir.HomeDir(), ".kube", "config"), "(optional) absolute path to the kubeconfig file")
+	namespace = flag.String("namespace", "", "(optional) specify namespace to get pods in particular namespace")
 	flag.Parse()
 
 	// uses the current context in kubeconfig
@@ -42,7 +40,8 @@ func main() {
 
 	// get pods in all the namespaces by omitting namespace
 	// Or specify namespace to get pods in particular namespace
-	pods, err := clientset.CoreV1().Pods("").List(context.TODO(), v1.ListOptions{})
+	// pods, err := clientset.CoreV1().Pods("").List(context.TODO(), v1.ListOptions{})
+	pods, err := clientset.CoreV1().Pods(*namespace).List(context.Background(), v1.ListOptions{})
 	if err != nil {
 		panic(err.Error())
 	}
