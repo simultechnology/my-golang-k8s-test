@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine
+FROM golang:1.21-alpine AS builder
 
 WORKDIR /api
 
@@ -10,4 +10,8 @@ COPY main.go .
 
 RUN go build -o app
 
-CMD ["./app"]
+FROM alpine
+
+COPY --from=builder /api/app /app
+
+CMD ["/app"]
