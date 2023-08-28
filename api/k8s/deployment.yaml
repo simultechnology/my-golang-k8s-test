@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
         - name: golang-api-container
-          image: golang-api:0.1
+          image: golang-api:0.2
           ports:
             - containerPort: 8080

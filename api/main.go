@@ -6,8 +6,10 @@ import (
 	"fmt"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"net/http"
+	"os"
 )
 
 // getPodsInfo retrieves the names of all pods in the specified namespace.
@@ -35,12 +37,22 @@ func getPodsInfo(clientset kubernetes.Interface, namespace *string) ([]string, e
 func handleGetPodsInfo(w http.ResponseWriter, r *http.Request) {
 	ns := r.URL.Query().Get("namespace")
 
-	// Create a Kubernetes clientset using the default kubeconfig.
-	config, err := clientcmd.BuildConfigFromFlags("", clientcmd.RecommendedHomeFile)
+	// Create a Kubernetes clientset using InClusterConfig for running within a pod.
+	var config *rest.Config
+	var err error
+
+	if _, exists := os.LookupEnv("KUBERNETES_SERVICE_HOST"); exists {
+		config, err = rest.InClusterConfig()
+	} else {
+		// Create a Kubernetes clientset using the default kubeconfig.
+		config, err = clientcmd.BuildConfigFromFlags("", clientcmd.RecommendedHomeFile)
+	}
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
