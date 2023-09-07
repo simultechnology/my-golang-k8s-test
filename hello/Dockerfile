@@ -3,7 +3,7 @@ FROM golang:1.21-alpine AS builder
 WORKDIR /api
 
 COPY go.mod ./
-COPY go.sum ./
+# COPY go.sum ./
 RUN go mod download
 
 COPY hello.go .
