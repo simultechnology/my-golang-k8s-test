@@ -25,6 +25,11 @@ This project is a sample application using Golang and Kubernetes.
    kubectl create namespace metallb-system
    helm install metallb metallb/metallb -n metallb-system
    ```
+3. set up istio
+   
+   ```
+   istioctl install --set profile=demo -y
+   ```
 
 3. deploy common Kubernetes configurations and manifests
 
