@@ -9,6 +9,8 @@ This project is a sample application using Golang and Kubernetes.
 - Go
 - Kubernetes
 - Helm
+- istioctl
+- kustomize
 
 ### Installation Steps
 
@@ -31,13 +33,13 @@ This project is a sample application using Golang and Kubernetes.
    istioctl install --set profile=demo -y
    ```
 
-3. deploy common Kubernetes configurations and manifests
+4. deploy common Kubernetes configurations and manifests
 
    ```
    kustomize build general-k8s/ | kubectl apply -f - 
    ```
 
-3. Build and deploy the application:
+5. Build and deploy the application:
    (Please add specific steps based on relevant Kubernetes manifests or scripts)
    
    - **api** Golang app [here](api/readme.md)
