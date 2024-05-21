@@ -4,7 +4,8 @@ metadata:
   name: api-virtual-service
 spec:
   hosts:
-    - "myapp.example.com"
+    - "*"
+#    - "myapp.example.com"
   gateways:
     - istio-system/istio-ingressgateway
   http:

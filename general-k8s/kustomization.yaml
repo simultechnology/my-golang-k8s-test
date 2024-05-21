@@ -4,3 +4,4 @@ resources:
   - ipaddresspool.yaml
   - istio-gateway.yaml
   - coredns-config.yaml
+  - multitool-deployment.yaml
