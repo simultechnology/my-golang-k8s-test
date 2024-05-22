@@ -7,7 +7,7 @@ data:
   Corefile: |
     myapp.example.com:53 {
         hosts {
-            fc00:f853:ccd:e793::d myapp.example.com
+            fc00:f853:ccd:e793::b myapp.example.com
         }
     }
     .:53 {

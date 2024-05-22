@@ -55,8 +55,31 @@ This project is a sample application using Golang and Kubernetes.
 - **go.mod** and **go.sum**: Files related to Go module dependencies.
 - **Makefile**: A Makefile for automating build, test, and other tasks.
 
+## Configurtion DNS
+
+get EXTERNAL-IP of istio-ingressgateway and set it to general-k8s/coredns-config.yaml
+
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns
+  namespace: kube-system
+data:
+  Corefile: |
+    myapp.example.com:53 {
+        hosts {
+            fc00:f853:ccd:e793::b myapp.example.com
+        }
+    }
+```
+
+![svc](img/svc.png "svc")
+
 
 ## Verification Steps
+
+### Each Service
 
 1. **Check the Service**:
    Verify that the service is correctly created after deployment.
@@ -89,7 +112,46 @@ This project is a sample application using Golang and Kubernetes.
 	
 	curl -g myapp.example.com/hello
 	```
-	
+
+### Verify VirtualService:
+Check if the VirtualService is correctly routing traffic.
+
+1. **Check the VirtualService configuration**:
+   Verify that the VirtualService is correctly created.
+
+   ```sh 
+   kubectl get virtualservice hello-virtual-service
+   ```
+2. **Check the EXTERNAL-IP of istio-ingressgateway**:
+   Verify the EXTERNAL-IP assigned to the created service.
+
+   ```sh
+   kubectl get svc istio-ingressgateway -n istio-system
+   ```
+   
+3. **Check the Service**:
+   log in to the network tools container
+
+   ```sh
+   kubectl exec -it multitool-****** -- bash
+   ```
+
+4. **Check access**:
+
+   ```sh
+   # without specifying host, the VirtualService is not applied
+   curl -g http://[fc00:f853:ccd:e793::b]/hello
+   
+   # with specifying host, the VirtualService is applied and the routing is working
+   curl -H "Host: myapp.example.com" http://[fc00:f853:ccd:e793::b]/hello
+   curl -H "Host: myapp.example.com" http://[fc00:f853:ccd:e793::b]/hello/hello
+   curl -H "Host: myapp.example.com" http://[fc00:f853:ccd:e793::b]/api/get-pods-info
+   
+   # this host is set in coredns
+   curl myapp.example.com/hello
+   curl myapp.example.com/hello/hello
+   curl myapp.example.com/api/get-pods-info
+   ```
 
 ## Technologies Used
 
