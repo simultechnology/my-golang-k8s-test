@@ -69,8 +69,20 @@ func handleGetPodsInfo(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(pods)
 }
 
+// handleAPIIndex responds with "api index!!" when the /api endpoint is accessed.
+func handleAPIIndex(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "api index!!")
+}
+
+// handleAPIHello responds with "api hello!!" when the /api/hello endpoint is accessed.
+func handleAPIHello(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "api hello!!")
+}
+
 // main initializes the HTTP server and sets up routes.
 func main() {
-	http.HandleFunc("/get-pods-info", handleGetPodsInfo)
+	http.HandleFunc("/api", handleAPIIndex)
+	http.HandleFunc("/api/hello", handleAPIHello)
+	http.HandleFunc("/api/get-pods-info", handleGetPodsInfo)
 	http.ListenAndServe(":8080", nil)
 }

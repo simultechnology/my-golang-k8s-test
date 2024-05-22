@@ -9,21 +9,21 @@ spec:
   gateways:
     - istio-system/istio-ingressgateway
   http:
+#    - match:
+#        - uri:
+#            exact: /api
+#      rewrite:
+#        uri: "/"
+#      route:
+#        - destination:
+#            host: api-service.api.svc.cluster.local
+#            port:
+#              number: 80
     - match:
         - uri:
-            exact: /api
-      rewrite:
-        uri: "/"
-      route:
-        - destination:
-            host: api-service.api.svc.cluster.local
-            port:
-              number: 80
-    - match:
-        - uri:
-            prefix: /api/
-      rewrite:
-        uri: "/"
+            prefix: /api
+#      rewrite:
+#        uri: "/"
       route:
         - destination:
             host: api-service.api.svc.cluster.local

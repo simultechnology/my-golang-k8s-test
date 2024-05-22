@@ -8,21 +8,21 @@ spec:
   gateways:
     - istio-system/istio-ingressgateway
   http:
+#    - match:
+#        - uri:
+#            exact: /hello
+#      rewrite:
+#        uri: "/"
+#      route:
+#        - destination:
+#            host: hello-service.hello.svc.cluster.local
+#            port:
+#              number: 80
     - match:
         - uri:
-            exact: /hello
-      rewrite:
-        uri: "/"
-      route:
-        - destination:
-            host: hello-service.hello.svc.cluster.local
-            port:
-              number: 80
-    - match:
-        - uri:
-            prefix: /hello/
-      rewrite:
-        uri: "/"
+            prefix: /hello
+#      rewrite:
+#        uri: "/"
       route:
         - destination:
             host: hello-service.hello.svc.cluster.local
